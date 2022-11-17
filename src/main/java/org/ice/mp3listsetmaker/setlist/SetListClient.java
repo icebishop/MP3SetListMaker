@@ -20,6 +20,8 @@ public class SetListClient {
 			conn.setRequestProperty("x-api-key", apiKey);
 
 			if (conn.getResponseCode() != 200) {
+				System.out.println(url.toString());
+				System.out.println(conn.getResponseMessage());
 				throw new RuntimeException("Failed : HTTP error code : "
 						+ conn.getResponseCode());
 			}

@@ -60,7 +60,7 @@ public class FileFinder {
 
 		List<Path> result;
 		try (Stream<Path> pathStream = Files.find(path, Integer.MAX_VALUE, (p, basicFileAttributes) -> p.getFileName()
-				.toString().replaceAll("[^A-Za-z0-9 éÉñÑ]", "").toUpperCase().contains(fileName.replaceAll("[^A-Za-z0-9 éÉñÑ]", "").toUpperCase()))) {
+				.toString().replaceAll("[^A-Za-z0-9 áÁéÉíÍóÓúÚñÑ]", "").toUpperCase().contains(fileName.replaceAll("[^A-Za-z0-9 áÁéÉíÍóÓúÚñÑ]", "").toUpperCase()))) {
 			result = pathStream.collect(Collectors.toList());
 		}
 		return result;

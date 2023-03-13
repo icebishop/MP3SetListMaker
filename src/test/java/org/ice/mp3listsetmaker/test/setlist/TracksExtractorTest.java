@@ -1,5 +1,7 @@
 package org.ice.mp3listsetmaker.test.setlist;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,19 +36,18 @@ class TracksExtractorTest {
 			String string = (String) iterator.next();
 			System.out.println(string);
 		}
-		
+
 		List<Mp3File> mp3Files = new ArrayList<>();
-		Collection<File> files = FileUtils.listFiles(
-				  new File("/mnt/datos/etc/mi musica/Guns n' Roses/"), 
-				  new RegexFileFilter("^(.mp3)"), 
-				  DirectoryFileFilter.DIRECTORY
-				);
-		
+		Collection<File> files = FileUtils.listFiles(new File("/mnt/datos/etc/mi musica/Guns n' Roses/"),
+				new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
+
 		for (Iterator<File> iterator = files.iterator(); iterator.hasNext();) {
 			File file = iterator.next();
 			try {
-				Mp3File mp3File =  new Mp3File(file);
-				mp3Files.add(mp3File);
+				if (file.getName().toLowerCase().endsWith("mp3")) {
+					Mp3File mp3File = new Mp3File(file);
+					mp3Files.add(mp3File);
+				}
 			} catch (UnsupportedTagException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -57,10 +58,12 @@ class TracksExtractorTest {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 
 		List<MediaFile> mediaFiles = FileFinder.findMediaFiles(list, mp3Files);
+		
+		assertNotNull(mediaFiles);
 
 		for (Iterator<MediaFile> iterator = mediaFiles.iterator(); iterator.hasNext();) {
 			MediaFile mediaFile = iterator.next();

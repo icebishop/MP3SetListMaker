@@ -18,6 +18,8 @@ import org.ice.media.m3u.io.M3UWriter;
 import org.ice.mp3listsetmaker.files.FileFinder;
 import org.ice.mp3listsetmaker.setlist.SetListClient;
 import org.ice.mp3listsetmaker.setlist.TracksExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
@@ -28,6 +30,8 @@ import com.mpatric.mp3agic.UnsupportedTagException;
  * music library args[2] name of the list
  */
 public class App {
+	
+	private static Logger logger = LoggerFactory.getLogger(App.class);
 
 	public static void main(String[] args) {
 
@@ -55,7 +59,7 @@ public class App {
 				M3UWriter.writeList(true, true, "/", args[2], mediaFiles);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error on execute: {}",e);
 		}
 	}
 
@@ -76,8 +80,7 @@ public class App {
 			prop.load(input);
 			return prop;
 		} catch (IOException ex) {
-			System.out.println("Sorry, unable to find config.properties");
-			// logger.error("Error get connection to for %s", ex);
+			logger.error("Sorry, unable to find config.properties");
 			return new Properties();
 		}
 	}
@@ -95,20 +98,11 @@ public class App {
 					Mp3File mp3File = new Mp3File(file);
 					mp3Files.add(mp3File);
 				}
-			} catch (UnsupportedTagException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (UnsupportedTagException| InvalidDataException | IOException e) {
+				logger.error( "Error on execute: {}",e);
 			}
-
 		}
 		return mp3Files;
-
 	}
 
 }

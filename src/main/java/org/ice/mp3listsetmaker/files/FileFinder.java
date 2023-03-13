@@ -1,6 +1,5 @@
 package org.ice.mp3listsetmaker.files;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,32 +32,27 @@ public class FileFinder {
 		for (Iterator<String> iterator = tracks.iterator(); iterator.hasNext();) {
 			String string = iterator.next();
 
-			try {
-				if (!string.equals("")) {
-					foundTracks = findByFileName(files, string);
-				}
-				if (!foundTracks.isEmpty()) {
-					for (Iterator<Path> iterator2 = foundTracks.iterator(); iterator2.hasNext();) {
-						Path path2 = iterator2.next();
-						if (Files.isRegularFile(path2)) {
-							MediaFile mediaFile = new MediaFile();
-							mediaFile.setPosition(position);
-							mediaFile.setName(string);
-							mediaFile.setUrl(path2.toString());
-							mediaFiles.add(mediaFile);
-							position++;
-						}
+			if (!string.equals("")) {
+				foundTracks = findByFileName(files, string);
+			}
+			if (!foundTracks.isEmpty()) {
+				for (Iterator<Path> iterator2 = foundTracks.iterator(); iterator2.hasNext();) {
+					Path path2 = iterator2.next();
+					if (Files.isRegularFile(path2)) {
+						MediaFile mediaFile = new MediaFile();
+						mediaFile.setPosition(position);
+						mediaFile.setName(string);
+						mediaFile.setUrl(path2.toString());
+						mediaFiles.add(mediaFile);
+						position++;
 					}
-				} else {
-					MediaFile mediaFile = new MediaFile();
-					mediaFile.setPosition(position);
-					mediaFile.setName(string);
-					mediaFile.setUrl("not found");
-					mediaFiles.add(mediaFile);
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				MediaFile mediaFile = new MediaFile();
+				mediaFile.setPosition(position);
+				mediaFile.setName(string);
+				mediaFile.setUrl("not found");
+				mediaFiles.add(mediaFile);
 			}
 		}
 
@@ -66,7 +60,7 @@ public class FileFinder {
 
 	}
 
-	private static List<Path> findByFileName(List<Mp3File> files, String fileName) throws IOException {		
+	private static List<Path> findByFileName(List<Mp3File> files, String fileName) {		
 		ID3v1 id3v1Tag = null;
 		List<Path> paths = new ArrayList<>();
 		String tofind =  cleanString(fileName).replaceAll("[^A-Za-z0-9]", "").toUpperCase();

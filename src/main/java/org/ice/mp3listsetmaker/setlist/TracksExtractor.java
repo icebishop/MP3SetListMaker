@@ -7,6 +7,10 @@ import com.jayway.jsonpath.JsonPath;
 
 public class TracksExtractor {
 	
+	private TracksExtractor() {
+		super();
+	}
+		
 	public static List<String> extractTracks(String data){
 		
 		DocumentContext jsonContext = JsonPath.parse(data);

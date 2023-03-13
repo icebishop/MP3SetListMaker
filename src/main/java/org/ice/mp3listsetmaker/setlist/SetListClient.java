@@ -4,10 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SetListClient {
+	
+	private static Logger logger = LoggerFactory.getLogger(SetListClient.class);
+	
+	private SetListClient() {
+		super();
+	}
 
 	public static String query(String setListId, String setListURL, String apiKey) {
 
@@ -20,10 +28,9 @@ public class SetListClient {
 			conn.setRequestProperty("x-api-key", apiKey);
 
 			if (conn.getResponseCode() != 200) {
-				System.out.println(url.toString());
-				System.out.println(conn.getResponseMessage());
-				throw new RuntimeException("Failed : HTTP error code : "
-						+ conn.getResponseCode());
+				logger.info(url.toString());
+				logger.info(conn.getResponseMessage());
+				return "";
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -32,7 +39,7 @@ public class SetListClient {
 			String output;
 			
 			StringBuilder data = new StringBuilder();
-			System.out.println("Output from Server .... \n");
+			logger.info("Output from Server ....");
 			while ((output = br.readLine()) != null) {
 				data.append(output);
 			}
@@ -41,14 +48,8 @@ public class SetListClient {
 			
 			return data.toString();
 
-		  } catch (MalformedURLException e) {
-
-			e.printStackTrace();
-
 		  } catch (IOException e) {
-
-			e.printStackTrace();
-
+			  	logger.error("Error on call client", e);
 		  }
 		  return null;	
 		}

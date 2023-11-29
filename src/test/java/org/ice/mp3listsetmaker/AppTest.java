@@ -8,11 +8,9 @@ class AppTest {
 
 	@Test
 	void test() {
-String args[] = {"53b17f0d","/mnt/datos/etc/mi musica/Aterciopelados/","aterciopelados" } ;
-    	
-    	App.main(args);
-    	
-        assertTrue( true );
+		String args[] = { "4ba17b1e", "/mnt/datos/etc/mi musica/Blur", "blur" };
+		App.main(args);
+		assertTrue(true);
 	}
 
 }

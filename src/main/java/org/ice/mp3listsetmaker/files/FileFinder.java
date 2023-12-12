@@ -13,18 +13,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
 public class FileFinder {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(FileFinder.class);
 
 	private FileFinder() {
 		super();
 	}
 
-	public static List<MediaFile> findMediaFiles(List<String> tracks, List<Mp3File> files ) {
-		
+	public static List<MediaFile> findMediaFiles(List<String> tracks, List<Mp3File> files) {
 
 		List<MediaFile> mediaFiles = new ArrayList<>();
 		int position = 1;
@@ -60,33 +60,44 @@ public class FileFinder {
 
 	}
 
-	private static List<Path> findByFileName(List<Mp3File> files, String fileName) {		
+	private static List<Path> findByFileName(List<Mp3File> files, String fileName) {
 		ID3v1 id3v1Tag = null;
+		ID3v2 id3v2Tag = null;
 		List<Path> paths = new ArrayList<>();
-		String tofind =  cleanString(fileName).replaceAll("[^A-Za-z0-9]", "").toUpperCase();
+		String tofind = cleanString(fileName).replaceAll("[^A-Za-z0-9]", "").toUpperCase();
 		for (Iterator<Mp3File> iterator = files.iterator(); iterator.hasNext();) {
-			Mp3File mp3File =  iterator.next();
-			
+			Mp3File mp3File = iterator.next();
+
 			if (mp3File.hasId3v1Tag()) {
-				id3v1Tag =   mp3File.getId3v1Tag();				  
+				id3v1Tag = mp3File.getId3v1Tag();
+			} else if (mp3File.hasId3v2Tag()) {
+				id3v2Tag = mp3File.getId3v2Tag();
 			}
-			
-			if(id3v1Tag != null) {
-				String song = cleanString(id3v1Tag.getTitle()).replaceAll("[^A-Za-z0-9]", "").toUpperCase();
-				logger.info(String.format("to find %s in song %s",tofind,song));
-				if(song.contains(tofind)) {
-					Path path = Paths.get(mp3File.getFilename());
-					paths.add(path);
-				}
-			}			
+
+			if (id3v1Tag != null) {
+				addtoPath(tofind, id3v1Tag.getTitle(), mp3File.getFilename(), paths);
+			} else if (id3v2Tag != null) {
+				addtoPath(tofind, id3v2Tag.getTitle(), mp3File.getFilename(), paths);
+			} else {
+				logger.info(String.format("null tag %s ", tofind));
+			}
 		}
 		return paths;
 	}
-	
-	private static String cleanString(String text) {		
+
+	private static void addtoPath(String tofind, String title, String filename, List<Path> paths) {
+		String song = cleanString(title).replaceAll("[^A-Za-z0-9]", "").toUpperCase();
+		logger.info(String.format("to find %s in song %s", tofind, song));
+		if (tofind.contains(song)||song.contains(tofind)) {
+			Path path = Paths.get(filename);
+			paths.add(path);
+		}
+	}
+
+	private static String cleanString(String text) {
 		text = Normalizer.normalize(text, Normalizer.Form.NFD);
 		text = text.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-		    return text;
+		return text;
 	}
 
 }

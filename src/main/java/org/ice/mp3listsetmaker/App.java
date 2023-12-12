@@ -74,7 +74,8 @@ public class App {
 	}
 
 	private static Properties loadProperties() {
-		try (InputStream input = new FileInputStream("config.properties")) {
+		//try (InputStream input = new FileInputStream("config.properties")) {
+		try (InputStream input = App.class.getClassLoader().getResourceAsStream("config.properties")) {	
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);

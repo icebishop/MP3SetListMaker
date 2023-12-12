@@ -27,7 +27,7 @@ class TracksExtractorTest {
 
 	@Test
 	void test() {
-		String data = SetListClient.query("23b1183f", "https://api.setlist.fm/rest/1.0/setlist/",
+		String data = SetListClient.query("4ba17b1e", "https://api.setlist.fm/rest/1.0/setlist/",
 				"eOn9MTWhSOMc3SBpfE-1chPDcGyGy461tXqd");
 
 		List<String> list = TracksExtractor.extractTracks(data);
@@ -38,7 +38,7 @@ class TracksExtractorTest {
 		}
 
 		List<Mp3File> mp3Files = new ArrayList<>();
-		Collection<File> files = FileUtils.listFiles(new File("/mnt/datos/etc/mi musica/Guns n' Roses/"),
+		Collection<File> files = FileUtils.listFiles(new File("/mnt/datos/etc/mi musica/Blur/"),
 				new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
 
 		for (Iterator<File> iterator = files.iterator(); iterator.hasNext();) {
@@ -71,7 +71,7 @@ class TracksExtractorTest {
 		}
 
 		try {
-			M3UWriter.writeList(true, true, "/", "guns", mediaFiles);
+			M3UWriter.writeList(true, true, "/", "blur", mediaFiles);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

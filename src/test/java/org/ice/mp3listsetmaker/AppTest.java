@@ -8,7 +8,7 @@ class AppTest {
 
 	@Test
 	void test() {
-		String args[] = { "4ba17b1e", "/mnt/datos/etc/mi musica/Blur", "blur" };
+		String args[] = { "1bae3528", "/mnt/datos/etc/mi musica/Pet Shop Boys", "blur" };
 		App.main(args);
 		assertTrue(true);
 	}
